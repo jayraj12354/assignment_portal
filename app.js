@@ -72,6 +72,22 @@ app.delete('/assignments/:id', async(req, res)=>{
     }
 })
 
+app.get('/assignments', async(req, res)=>{
+    try {
+        const { submitted } = req.params;
+        let result = await pool.query(`
+            SELECT * from assignments where submitted=$1
+            returning *;`, [submitted])
+        res.status(200).json(result.rows[0])
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            errorMessage: 'Server is stop'
+        });
+    }
+})
+
+
 
 
 
